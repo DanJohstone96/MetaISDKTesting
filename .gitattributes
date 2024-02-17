@@ -1,0 +1,4 @@
+*.tga filter=lfs diff=lfs merge=lfs -text
+*.arr filter=lfs diff=lfs merge=lfs -text
+*.aar filter=lfs diff=lfs merge=lfs -text
+*.png filter=lfs diff=lfs merge=lfs -text
