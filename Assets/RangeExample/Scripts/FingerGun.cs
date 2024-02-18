@@ -79,7 +79,7 @@ public class FingerGun : MonoBehaviour
             SpawnedHitEffect.position = hit.point;
 
             SpawnedHitEffect.rotation = Quaternion.LookRotation(hit.normal, Vector3.up);
-            Destroy(SpawnedHitEffect,2);
+            Destroy(SpawnedHitEffect.gameObject,2);
             Debug.Log($"Hit {hit.collider.name}",hit.collider.gameObject);
         }
     }
