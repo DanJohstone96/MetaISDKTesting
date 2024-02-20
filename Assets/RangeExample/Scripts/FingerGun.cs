@@ -33,6 +33,11 @@ public class FingerGun : MonoBehaviour
     [SerializeField]
     private GameObject _HitEffect;
 
+    [SerializeField]
+    private Vector3 _ForceVector;
+    [SerializeField]
+    private ForceMode _ForceMode;
+
     private AudioSource _AudioSource;
 
     private bool _IsAiming;
@@ -40,6 +45,8 @@ public class FingerGun : MonoBehaviour
     private Vector3 _LaserDirection = Vector3.zero;
 
     private int _ShotsRemaining;
+
+   
 
     private void Awake()
     {
@@ -94,10 +101,15 @@ public class FingerGun : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(_LaserOrigin.position, _LaserOrigin.TransformDirection(_LaserDirection) * _LaserLength, out hit))
             {
-                Hittable hittable = hit.transform.GetComponent<Hittable>();
+                Hittable hittable = hit.collider.GetComponent<Hittable>();
                 if (hittable)
                 {
-                    hittable.OnHit.Invoke();
+                    Debug.Log("Hittable on hit object", hit.collider.gameObject);
+                    hittable.Hit(hit.point, _ForceVector, _ForceMode);
+                }
+                else 
+                {
+                    Debug.Log("No Hittable on hit object",hit.collider.gameObject);
                 }
                 Transform SpawnedHitEffect = Instantiate(_HitEffect).transform;
 

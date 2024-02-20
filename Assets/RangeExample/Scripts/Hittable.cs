@@ -7,20 +7,44 @@ public class Hittable : MonoBehaviour
 {
     public UnityEvent OnHit;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private Rigidbody _RigidBody;
+    [SerializeField]
+    private AudioSource _AudioSource;
+    [SerializeField]
+    private AudioClip _AudioClip;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField]
+    private GameObject _DetroyOnHit;
 
-    public void Hit(Vector3 hitPosition) 
+    [SerializeField]
+    private float _DestroyDelay = 5;
+
+    [SerializeField]
+    private float _Value = 5;
+
+    [HideInInspector]
+    public float Value => _Value;
+
+    public void Hit(Vector3 hitPosition, Vector3 force,ForceMode forceMode) 
     {
         OnHit?.Invoke();
+        Debug.Log("I was hit ");
+        if (_RigidBody) 
+        {
+            Debug.Log("I Changed physics stuff");
+
+            _RigidBody.isKinematic = false;
+            _RigidBody.useGravity = true;
+            _RigidBody.AddForceAtPosition(force, hitPosition,forceMode);
+        }
+        if (_AudioSource) 
+        {
+            Debug.Log("I played a sound ");
+
+            _AudioSource.PlayOneShot(_AudioClip);
+        }
+
+        Destroy(_DetroyOnHit, _DestroyDelay);
     }
 }
