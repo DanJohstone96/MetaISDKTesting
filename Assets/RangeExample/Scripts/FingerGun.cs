@@ -46,7 +46,11 @@ public class FingerGun : MonoBehaviour
 
     private int _ShotsRemaining;
 
-   
+
+    private Transform _LerpedLaserOrigin;
+
+    [SerializeField]
+    private int _LerpSpeedModifier = 10;
 
     private void Awake()
     {
@@ -80,6 +84,8 @@ public class FingerGun : MonoBehaviour
         }
 
         _ShotsRemaining = _MaxShots;
+
+        _LerpedLaserOrigin = new GameObject().transform;
     }
 
     public void Aim(bool isAiming) 
@@ -99,7 +105,7 @@ public class FingerGun : MonoBehaviour
         {
             _AudioSource.PlayOneShot(_Fire);
             RaycastHit hit;
-            if (Physics.Raycast(_LaserOrigin.position, _LaserOrigin.TransformDirection(_LaserDirection) * _LaserLength, out hit))
+            if (Physics.Raycast(_LerpedLaserOrigin.position, _LerpedLaserOrigin.TransformDirection(_LaserDirection) * _LaserLength, out hit))
             {
                 Hittable hittable = hit.collider.GetComponent<Hittable>();
                 if (hittable)
@@ -138,9 +144,13 @@ public class FingerGun : MonoBehaviour
     {
         if (_IsAiming)
         {
-            Vector3 origin = _LaserOrigin.position;
+            _LerpedLaserOrigin.position =Vector3.Lerp(_LerpedLaserOrigin.position, _LaserOrigin.position,Time.deltaTime * _LerpSpeedModifier) ;
+            _LerpedLaserOrigin.rotation = Quaternion.Lerp(_LerpedLaserOrigin.rotation, _LaserOrigin.rotation,Time.deltaTime * _LerpSpeedModifier);
+            Vector3 origin = _LerpedLaserOrigin.position;
+
             _LineRenderer.SetPosition(0, origin);
-            _LineRenderer.SetPosition(1, origin += _LaserOrigin.TransformDirection(_LaserDirection) * _LaserLength);
+            _LineRenderer.SetPosition(1, origin += _LerpedLaserOrigin.TransformDirection(_LaserDirection) * _LaserLength);
+
         }
     }
 

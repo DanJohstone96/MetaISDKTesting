@@ -16,7 +16,10 @@ MonoBehaviour:
   _thumbFeatureConfigs:
     _value: []
   _indexFeatureConfigs:
-    _value: []
+    _value:
+    - _mode: 0
+      _feature: 0
+      _state: 0
   _middleFeatureConfigs:
     _value:
     - _mode: 0

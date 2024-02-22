@@ -26,8 +26,18 @@ public class Hittable : MonoBehaviour
     [HideInInspector]
     public float Value => _Value;
 
+    [SerializeField]
+    private bool _CanBeMultiHit = false;
+
+    private bool _WasHit = false;
+
     public void Hit(Vector3 hitPosition, Vector3 force,ForceMode forceMode) 
     {
+        if (!_CanBeMultiHit && _WasHit) 
+        {
+            return;
+        }
+        _WasHit = true;
         OnHit?.Invoke();
         Debug.Log("I was hit ");
         if (_RigidBody) 
