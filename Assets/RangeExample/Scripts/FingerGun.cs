@@ -1,3 +1,4 @@
+using Meta.WitAi;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,6 +20,9 @@ public class FingerGun : MonoBehaviour
 
     [SerializeField]
     private LineRenderer _LineRenderer;
+
+    [SerializeField] 
+    private Transform _LaserTip;
 
     [SerializeField]
     private int _MaxShots = 6;
@@ -51,6 +55,8 @@ public class FingerGun : MonoBehaviour
 
     [SerializeField]
     private int _LerpSpeedModifier = 10;
+
+    private RaycastHit _CurrentHit;
 
     private void Awake()
     {
@@ -92,6 +98,7 @@ public class FingerGun : MonoBehaviour
     {
         _IsAiming = isAiming;
         _LineRenderer.enabled = _IsAiming;
+        _LaserTip.gameObject.SetActive(_IsAiming);
         //_AudioSource.PlayOneShot(_Sipn);
     }
 
@@ -104,27 +111,29 @@ public class FingerGun : MonoBehaviour
         else 
         {
             _AudioSource.PlayOneShot(_Fire);
-            RaycastHit hit;
-            if (Physics.Raycast(_LerpedLaserOrigin.position, _LerpedLaserOrigin.TransformDirection(_LaserDirection) * _LaserLength, out hit))
+
+            if (_CurrentHit.collider != null) 
             {
-                Hittable hittable = hit.collider.GetComponent<Hittable>();
+                Hittable hittable = _CurrentHit.collider.GetComponent<Hittable>();
                 if (hittable)
                 {
-                    Debug.Log("Hittable on hit object", hit.collider.gameObject);
-                    hittable.Hit(hit.point, _ForceVector, _ForceMode);
+                    Debug.Log("Hittable on hit object", _CurrentHit.collider.gameObject);
+                    hittable.Hit(_CurrentHit.point, _ForceVector, _ForceMode);
                 }
-                else 
+                else
                 {
-                    Debug.Log("No Hittable on hit object",hit.collider.gameObject);
+                    Debug.Log("No Hittable on hit object", _CurrentHit.collider.gameObject);
                 }
                 Transform SpawnedHitEffect = Instantiate(_HitEffect).transform;
 
-                SpawnedHitEffect.position = hit.point;
+                SpawnedHitEffect.position = _CurrentHit.point;
 
-                SpawnedHitEffect.rotation = Quaternion.LookRotation(hit.normal, Vector3.up);
+                SpawnedHitEffect.rotation = Quaternion.LookRotation(_CurrentHit.normal, Vector3.up);
                 Destroy(SpawnedHitEffect.gameObject, 2);
-                Debug.Log($"Hit {hit.collider.name}", hit.collider.gameObject);
+                Debug.Log($"Hit {_CurrentHit.collider.name}", _CurrentHit.collider.gameObject);
             }
+
+            
             _ShotsRemaining--;
         }
     }
@@ -146,10 +155,24 @@ public class FingerGun : MonoBehaviour
         {
             _LerpedLaserOrigin.position =Vector3.Lerp(_LerpedLaserOrigin.position, _LaserOrigin.position,Time.deltaTime * _LerpSpeedModifier) ;
             _LerpedLaserOrigin.rotation = Quaternion.Lerp(_LerpedLaserOrigin.rotation, _LaserOrigin.rotation,Time.deltaTime * _LerpSpeedModifier);
-            Vector3 origin = _LerpedLaserOrigin.position;
 
-            _LineRenderer.SetPosition(0, origin);
-            _LineRenderer.SetPosition(1, origin += _LerpedLaserOrigin.TransformDirection(_LaserDirection) * _LaserLength);
+            Vector3 origin = _LerpedLaserOrigin.position;
+            Vector3 endPos = origin += _LerpedLaserOrigin.TransformDirection(_LaserDirection) * _LaserLength;
+
+            RaycastHit hit;
+            if (Physics.Raycast(_LerpedLaserOrigin.position, _LerpedLaserOrigin.TransformDirection(_LaserDirection) * _LaserLength, out hit))
+            {
+                if (hit.collider != null) 
+                {
+                    endPos = hit.point;
+                }
+                
+            }
+            _CurrentHit = hit;
+
+            _LaserTip.position = endPos;
+            _LineRenderer.SetPosition(0, _LerpedLaserOrigin.position);
+            _LineRenderer.SetPosition(1, endPos);
 
         }
     }
