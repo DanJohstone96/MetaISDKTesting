@@ -24,7 +24,7 @@ public class HittableSpawner : MonoBehaviour
     [SerializeField]
     private List<SpawnedHittable> _SpawnedHittableList = new List<SpawnedHittable>();
 
-    private void Awake()
+    private void Start()
     {
         SpawnHittable(_InitialTargetCount);
     }
@@ -39,7 +39,7 @@ public class HittableSpawner : MonoBehaviour
         for (int i = 0; i < NumberToFind; i++)
         {
             bool found = false;
-            Vector3 position = Vector3.zero;
+            Vector3 position = _PointInMesh.ReturnPointInsideMesh();
 
             while (!found)
             {

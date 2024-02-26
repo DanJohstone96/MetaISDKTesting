@@ -4,7 +4,10 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/RangeExample/Scenes/GrabbableBuildingBlock.unity
+    guid: 44368c72ae1f1e3428f72db06accf73f
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 20bd522c71b45be43a1c0aee8612c31e, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: a4f0e7f32fcb16848907502665275af3, type: 2}

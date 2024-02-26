@@ -57371,6 +57371,7 @@ GameObject:
   - component: {fileID: 1886216744}
   - component: {fileID: 1886216743}
   - component: {fileID: 1886216742}
+  - component: {fileID: 1886216745}
   m_Layer: 0
   m_Name: PokeableCanvas
   m_TagString: Untagged
@@ -57557,6 +57558,27 @@ Transform:
   m_Father: {fileID: 886046826}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &1886216745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1886216741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb86ba9d4c5126e48bfef9b0c9550e9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _interactorFilters: []
+  _maxInteractors: -1
+  _maxSelectingInteractors: -1
+  _data: {fileID: 0}
+  _pointableElement: {fileID: 1886216743}
+  _surface: {fileID: 732210787}
+  _selectSurface: {fileID: 0}
+  _movementProvider: {fileID: 0}
+  _tiebreakerScore: 0
 --- !u!1 &1886642160
 GameObject:
   m_ObjectHideFlags: 0
